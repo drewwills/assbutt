@@ -1,7 +1,7 @@
 <template>
-  <div class="assbutt">
-
-    <h1>{{ msg }}</h1>
+  <div id="gameContainer" class="assbutt">
+    <h1>{{ title }}</h1>
+    <h2>{{ subtitle }}</h2>
   </div>
 </template>
 
@@ -11,7 +11,8 @@ import phaser from 'phaser';
 export default {
   name: 'Assbutt',
   props: {
-    msg: String
+    title: String,
+    subtitle: String
   },
   created() {
 
@@ -100,6 +101,7 @@ export default {
     }
 
     var config = {
+      parent: 'gameContainer',
       type: Phaser.AUTO,
       width: SCENE_WIDTH,
       height: SCENE_HEIGHT,
@@ -125,5 +127,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  h1 {
+    margin: 0;
+  }
+  h2 {
+    margin: .25rem;
+  }
 </style>

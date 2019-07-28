@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <!-- img alt="Vue logo" src="./assets/logo.png" -->
-    <Assbutt msg="Welcome to Your Vue.js App"/>
+    <Assbutt
+        title="Flight of the Assbutt"
+        subtitle="Team Bangarang 2019"
+    />
   </div>
 </template>
 
@@ -23,6 +26,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
