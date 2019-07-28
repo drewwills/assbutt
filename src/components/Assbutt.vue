@@ -21,8 +21,6 @@ export default {
     const PLAYER_VELOCITY = 250;
 
     const SPAWN_INITIAL_DELAY = 7000;
-    const SPAWN_X_POS_MIN = 10;
-    const SPAWN_X_POS_RANGE = 580;
     const SPAWN_ACCELERATION = 157;
 
     const ASSBUTT_VELOCITY_Y = -350;
@@ -33,18 +31,36 @@ export default {
 
     let nextSpawn = 7000;
 
+    let score = 0;
+    let scoreText;
+
     const playerCollide = function(assbutt, player) {
+      score += 10;
+      scoreText.setText('Score: ' + score);
       const direction = assbutt.body.position.x - player.body.position.x;
       const velocityX = direction * 10;
       assbutt.setVelocityX(velocityX);
       assbutt.setVelocityY(ASSBUTT_VELOCITY_Y);
     }
 
+    const groundCollide = function(assbutt, ground) {
+      const posX = assbutt.body.position.x ;
+      if (posX < 0 || posX > SCENE_WIDTH) {
+        // Assbutt bounced to safety...
+        assbutt.disableBody(true, true);
+      } else {
+        // Game over
+        this.physics.pause();
+        player.setTint(0xff0000);
+        this.add.text(SCENE_WIDTH / 2.25, SCENE_HEIGHT / 4, 'Game Over!', { fontSize: '48px', fill: '#f00' });
+      }
+    }
+
     const spawnAssbutt = function() {
       // Spawn an assbutt above the scene and at a random point on the X axis.
-      const posX = Math.floor(Math.random() * SPAWN_X_POS_RANGE) + SPAWN_X_POS_MIN;
-      let assbutt = this.physics.add.sprite(posX, -100, 'assbutt');
-      this.physics.add.collider(assbutt, player, playerCollide);
+      let assbutt = this.physics.add.sprite(Phaser.Math.Between(10, SCENE_WIDTH - 10), -100, 'assbutt');
+      this.physics.add.collider(assbutt, player, playerCollide, null, this);
+      this.physics.add.collider(assbutt, ground, groundCollide, null, this);
 
       // Set the next assbutt to spawn sooner than the last
       if (nextSpawn > 0) {
@@ -62,6 +78,7 @@ export default {
 
     const create = function() {
       this.add.image(300, 400, 'background');
+      scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '24px', fill: '#333' });
       ground = this.physics.add.staticGroup();
       ground.create(200, 725, 'ground');
       player = this.physics.add.sprite(100, 450, 'flower')
