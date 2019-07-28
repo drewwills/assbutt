@@ -15,10 +15,43 @@ export default {
   },
   created() {
 
+    const SCENE_WIDTH = 600;
+    const SCENE_HEIGHT = 800;
+
+    const PLAYER_VELOCITY = 250;
+
+    const SPAWN_INITIAL_DELAY = 7000;
+    const SPAWN_X_POS_MIN = 10;
+    const SPAWN_X_POS_RANGE = 580;
+    const SPAWN_ACCELERATION = 157;
+
+    const ASSBUTT_VELOCITY_Y = -350;
+
     let ground;
     let player;
-    let assbutts;
     let cursors;
+
+    let nextSpawn = 7000;
+
+    const playerCollide = function(assbutt, player) {
+      const direction = assbutt.body.position.x - player.body.position.x;
+      const velocityX = direction * 10;
+      assbutt.setVelocityX(velocityX);
+      assbutt.setVelocityY(ASSBUTT_VELOCITY_Y);
+    }
+
+    const spawnAssbutt = function() {
+      // Spawn an assbutt above the scene and at a random point on the X axis.
+      const posX = Math.floor(Math.random() * SPAWN_X_POS_RANGE) + SPAWN_X_POS_MIN;
+      let assbutt = this.physics.add.sprite(posX, -100, 'assbutt');
+      this.physics.add.collider(assbutt, player, playerCollide);
+
+      // Set the next assbutt to spawn sooner than the last
+      if (nextSpawn > 0) {
+        nextSpawn -= SPAWN_ACCELERATION;
+        this.time.addEvent({ delay: nextSpawn, callback: spawnAssbutt, callbackScope: this});
+      }
+    }
 
     const preload = function() {
       this.load.image('background', '/img/background_600x800.png');
@@ -35,31 +68,24 @@ export default {
           .setBounce(0.2)
           .setCollideWorldBounds(true);
       this.physics.add.collider(player, ground);
-      assbutts = this.physics.add.group({
-        key: 'assbutt',
-        repeat: 0,
-        setXY: { x: 12, y: 0 }
-      });
       cursors = this.input.keyboard.createCursorKeys();
+      this.time.addEvent({ delay: nextSpawn, callback: spawnAssbutt, callbackScope: this});
     }
 
     const update = function() {
       if (cursors.left.isDown) {
-        player.setVelocityX(-160);
+        player.setVelocityX(-PLAYER_VELOCITY);
       } else if (cursors.right.isDown) {
-        player.setVelocityX(160);
+        player.setVelocityX(PLAYER_VELOCITY);
       } else {
         player.setVelocityX(0);
       }
-//      if (player.body.touching.down) {
-//        console.log('I\'m touching it!');
-//      }
     }
 
     var config = {
       type: Phaser.AUTO,
-      width: 600,
-      height: 800,
+      width: SCENE_WIDTH,
+      height: SCENE_HEIGHT,
       physics: {
         default: 'arcade',
         arcade: {
