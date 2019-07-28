@@ -45,7 +45,7 @@ export default {
     }
 
     const groundCollide = function(assbutt, ground) {
-      const posX = assbutt.body.position.x ;
+      const posX = assbutt.body.position.x;
       if (posX < 0 || posX > SCENE_WIDTH) {
         // Assbutt bounced to safety...
         assbutt.disableBody(true, true);
@@ -81,7 +81,7 @@ export default {
       this.add.image(300, 400, 'background');
       scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '24px', fill: '#333' });
       ground = this.physics.add.staticGroup();
-      ground.create(200, 725, 'ground');
+      ground.create(200, 750, 'ground');
       player = this.physics.add.sprite(100, 450, 'flower')
           .setBounce(0.2)
           .setCollideWorldBounds(true);
@@ -98,6 +98,10 @@ export default {
       } else {
         player.setVelocityX(0);
       }
+
+      this.physics.overlap(player, ground, function() {
+        player.setVelocityY(-100);
+      });
     }
 
     var config = {
@@ -119,7 +123,6 @@ export default {
       }
     };
     var game = new Phaser.Game(config);
-
 
   }
 }
