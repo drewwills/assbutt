@@ -22,7 +22,7 @@ export default {
     const PLAYER_VELOCITY = 250;
 
     const SPAWN_INITIAL_DELAY = 7000;
-    const SPAWN_ACCELERATION = 157;
+    const SPAWN_ACCELERATION = 227;
 
     const ASSBUTT_VELOCITY_Y = -350;
 
