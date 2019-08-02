@@ -19,7 +19,7 @@ export default {
     const SCENE_WIDTH = 600;
     const SCENE_HEIGHT = 800;
 
-    const PLAYER_VELOCITY = 250;
+    const PLAYER_VELOCITY = 300;
 
     const SPAWN_INITIAL_DELAY = 7000;
 
@@ -58,12 +58,12 @@ export default {
 
     const spawnAssbutt = function() {
       // Spawn an assbutt above the scene and at a random point on the X axis.
-      let assbutt = this.physics.add.sprite(Phaser.Math.Between(10, SCENE_WIDTH - 10), -100, 'assbutt');
+      let assbutt = this.physics.add.sprite(Phaser.Math.Between(25, SCENE_WIDTH - 25), -100, 'assbutt');
       this.physics.add.collider(assbutt, player, playerCollide, null, this);
       this.physics.add.collider(assbutt, ground, groundCollide, null, this);
 
       // Set the next assbutt to spawn sooner than the last
-      nextSpawn = nextSpawn * 0.9; // 10% sooner
+      nextSpawn = nextSpawn * 0.95; // % sooner
       this.time.addEvent({ delay: nextSpawn, callback: spawnAssbutt, callbackScope: this});
     }
 
